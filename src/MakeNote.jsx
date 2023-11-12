@@ -4,6 +4,7 @@ import { db } from "./firebase";
 import "firebase/firestore";
 import "firebase/storage";
 import cogoToast from "cogo-toast";
+import './MakeNote.css'
 
 function MakeNote() {
   const [title, setTitle] = useState("");
@@ -23,18 +24,10 @@ function MakeNote() {
   const handleSubmit = (event) => {
     event.preventDefault();
     savePost();
-    cogoToast.success("Your notes was");
-
-    //   fetch("http://localhost:3000/file", {
-    //     method: "Post",
-    //     headers: { "Content-type": "application/json" }, // informs the api that the data is json type
-    //     body: JSON.stringify(result), // creates the object into Json string
-    //   }).then(() => {
-    //     console.log("New notes added");
-    //   });
+    cogoToast.success("Your notes was added");
   };
   return (
-    <div>
+    <div className="Notesform">
       <form onSubmit={handleSubmit}>
         <div className="form-group col-md-6">
           <label htmlFor="Add your Title Here">Title</label>

@@ -1,11 +1,11 @@
 import React from 'react'
 
-export default function 
-(props) {
+export default function Note({ title, content }) {
   return (
     <div className='note'>
-    {props.title}
-    {props.component}
+      <h1>{title}</h1>
+      <p>{content}</p>
     </div>
-  )
+  );
 }
+
