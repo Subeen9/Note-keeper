@@ -4,9 +4,14 @@ import { db } from "./firebase";
 import "firebase/firestore";
 import "firebase/storage";
 import cogoToast from "cogo-toast";
-import './MakeNote.css'
+import './index.css'
+import student from './assests/students.png'
+import { useNavigate } from "react-router-dom";
+
+
 
 function MakeNote() {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   // collection  Reference
@@ -23,18 +28,25 @@ function MakeNote() {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    savePost();
+     savePost();
     cogoToast.success("Your notes was added");
+    navigate("/home");
   };
+
   return (
-    <div className="Notesform">
-      <form onSubmit={handleSubmit}>
-        <div className="form-group col-md-6">
-          <label htmlFor="Add your Title Here">Title</label>
+    <>
+    <div className="main">
+      <picture className="studentPicture">
+      <img src={student}  alt="student "></img>
+      </picture>
+    <div className="notes">
+      <h3>Write your ideas here</h3>
+      <form onSubmit={handleSubmit} className="notesSubmit">
+        <div className="form-group col-md-3">
           <input
             type="text"
             className="form-control"
-            placeholder="Title here"
+            placeholder="Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
@@ -56,6 +68,9 @@ function MakeNote() {
         </button>
       </form>
     </div>
+    </div>
+  
+    </>
   );
 }
 export default MakeNote;

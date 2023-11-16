@@ -1,10 +1,13 @@
 import React, { useContext } from "react";
 import MakeNote from "../MakeNote";
 import { Link } from "react-router-dom";
-import { SearchContext } from "../Home";
+import { useSearch } from "../Home";
+
+
 
 function Navigation() {
-  const handleSearch = useContext(SearchContext);
+  const search = useSearch()
+ 
   return (
     <>
       <div className="header">
@@ -25,15 +28,15 @@ function Navigation() {
             </li>
           </ul>
           <form className="d-flex ms-auto order-5" role="search">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search Notes"
-              aria-label="Search"
-            />
+          <input
+  className="form-control me-2"
+  type="search"
+  placeholder="Search Notes"
+  aria-label="Search"
+ 
+/>
             <button
               className="btn btn-outline-success"
-              onClick={handleSearch}
               type="submit"
             >
               Search

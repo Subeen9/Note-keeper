@@ -1,36 +1,34 @@
-import React, { createContext, useEffect, useState } from "react";
-import notes from "./file";
-import Note from "./Note";
+// Home.js
+import React, { Children, useContext, useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { db } from "./firebase";
 import cogoToast from "cogo-toast";
-export const SearchContext = createContext();
+import Note from "./Note";
+import Navigation from "./components/Navigation";
+
+const searchContext = React.createContext()
 function Home() {
   const [Notes, setNotes] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
+
+
   const handleSearch = (e) => {
     e.preventDefault();
     const searchValue = e.target.value;
     setSearch(searchValue);
-    const searchRegex = new RegExp(search, "i"); // i makes regular expression case insensitive
-    const findNotes = Notes.filter((notes) =>
-      notes.title.title.match(searchRegex)
-    );
+    const searchRegex = new RegExp(search, "i");
+    const findNotes = Notes.filter((note) => note.title.title.match(searchRegex));
     setSearchResults(findNotes);
   };
+
   const fetchNotes = async () => {
     try {
       const querySnapShot = await getDocs(collection(db, "notes"));
-      const allNotes = [];
-      querySnapShot.forEach((doc) => {
-        const dataId = {
-          id: doc.id,
-          ...doc.data(),
-        };
-        allNotes.push(dataId);
-      });
-      console.log(allNotes);
+      const allNotes = querySnapShot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       setNotes(allNotes);
     } catch (e) {
       console.log("Error fetching data " + e);
@@ -43,18 +41,19 @@ function Home() {
   }, []);
 
   return (
-    <SearchContext.Provider value={handleSearch}>
-      <>
-        {Notes.map((note) => (
-          <Note
-            key={note.id}
-            title={note.title.title}
-            content={note.content.content}
-          />
-        ))}
-      </>
-    </SearchContext.Provider>
+    <>
+    <searchContext.Provider value={{searchResults,handleSearch}}>
+      
+      {Notes.map((note) => (
+        <Note key={note.id} title={note.title.title} content={note.content.content} />
+      ))}
+     </searchContext.Provider>
+    </>
   );
+}
+export const useSearch = ()=>{
+  const search = useContext(searchContext);
+  return search;
 }
 
 export default Home;

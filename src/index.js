@@ -6,9 +6,7 @@ import { SearchContext } from "./Home";
 
 ReactDom.render(
   <BrowserRouter>
-  <SearchContext.Provider>
     <App />
-    </SearchContext.Provider>
   </BrowserRouter>,
 
   document.getElementById("root")
