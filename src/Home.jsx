@@ -4,22 +4,30 @@ import { getDocs, collection } from "firebase/firestore";
 import { db } from "./firebase";
 import cogoToast from "cogo-toast";
 import Note from "./Note";
-import Navigation from "./components/Navigation";
+
 
 const searchContext = React.createContext()
 function Home() {
   const [Notes, setNotes] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
+  const[click, isClick] = useState(false);
 
 
   const handleSearch = (e) => {
-    e.preventDefault();
     const searchValue = e.target.value;
     setSearch(searchValue);
-    const searchRegex = new RegExp(search, "i");
-    const findNotes = Notes.filter((note) => note.title.title.match(searchRegex));
-    setSearchResults(findNotes);
+
+    if (searchValue.trim() === "") {
+     
+      setSearchResults(Notes);
+    } else {
+      const searchRegex = new RegExp(searchValue, "i");
+      const findNotes = Notes.filter((note) => note.title.title.match(searchRegex));
+      setSearchResults(findNotes);
+    }
+
+    isClick(true);
   };
 
   const fetchNotes = async () => {
@@ -29,7 +37,11 @@ function Home() {
         id: doc.id,
         ...doc.data(),
       }));
+      if(click == false)
       setNotes(allNotes);
+    else{
+      
+    }
     } catch (e) {
       console.log("Error fetching data " + e);
       cogoToast.error("Cannot get the notes");
@@ -39,21 +51,20 @@ function Home() {
   useEffect(() => {
     fetchNotes();
   }, []);
+ 
 
-  return (
+  return(
     <>
-    <searchContext.Provider value={{searchResults,handleSearch}}>
+    {Notes.map((note) => (
+      <Note key={note.id} title={note.title.title} content={note.content.content} />
+    ))}
+   
+  </>
+  )
       
-      {Notes.map((note) => (
-        <Note key={note.id} title={note.title.title} content={note.content.content} />
-      ))}
-     </searchContext.Provider>
-    </>
-  );
-}
-export const useSearch = ()=>{
-  const search = useContext(searchContext);
-  return search;
-}
+    
+  }
+  
 
-export default Home;
+
+export default Home

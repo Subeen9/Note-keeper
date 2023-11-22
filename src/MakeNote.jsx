@@ -31,6 +31,7 @@ function MakeNote() {
      savePost();
     cogoToast.success("Your notes was added");
     navigate("/home");
+    
   };
 
   return (

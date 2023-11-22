@@ -1,13 +1,12 @@
 import React, { useContext } from "react";
 import MakeNote from "../MakeNote";
 import { Link } from "react-router-dom";
-import { useSearch } from "../Home";
+import Home from "../Home";
+
 
 
 
 function Navigation() {
-  const search = useSearch()
- 
   return (
     <>
       <div className="header">
@@ -38,6 +37,7 @@ function Navigation() {
             <button
               className="btn btn-outline-success"
               type="submit"
+              onClick={Home.handleSearch}
             >
               Search
             </button>
